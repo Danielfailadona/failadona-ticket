@@ -5,7 +5,9 @@
  */
 package admin;
 
+import Startups.Login;
 import config.Session;
+import config.Usables;
 import config.dbConnect;
 import config.passwordHasher;
 import java.awt.Color;
@@ -32,9 +34,10 @@ import javax.swing.JOptionPane;
 public class CU_Admin extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(51, 51, 255);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(240, 240, 240);
+    public final Usables use = new Usables();
     
     public CU_Admin() {
         initComponents();
@@ -65,7 +68,11 @@ public class CU_Admin extends javax.swing.JFrame {
         try {
             // Read the image file
             File imageFile = new File(imagePath);
+//            System.out.println("imagePath: " + imagePath);
+//            System.out.println("imageFile: " + imageFile);
             BufferedImage image = ImageIO.read(imageFile);
+//            System.out.println("image: " + image);
+
 
             // Get the original width and height of the image
             int originalWidth = image.getWidth();
@@ -261,7 +268,7 @@ public class CU_Admin extends javax.swing.JFrame {
         Navigation = new javax.swing.JPanel();
         cancel = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        Backbround = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -297,11 +304,17 @@ public class CU_Admin extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
-        New_Manager.setBackground(new java.awt.Color(102, 102, 102));
+        New_Manager.setBackground(new java.awt.Color(124, 77, 63));
         New_Manager.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -353,7 +366,7 @@ public class CU_Admin extends javax.swing.JFrame {
 
         New_Manager.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(51, 51, 51));
+        Navigation.setBackground(new java.awt.Color(30, 30, 30));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         cancel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -369,34 +382,36 @@ public class CU_Admin extends javax.swing.JFrame {
         });
         cancel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Cancel");
-        cancel.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 8, 90, 10));
+        cancel.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 8, 120, 20));
 
-        Navigation.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, -1, 30));
-        Navigation.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 240, 90));
-        Navigation.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 430));
+        Navigation.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 120, 40));
+
+        Backbround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Jeva.png"))); // NOI18N
+        Navigation.add(Backbround, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 280, 560));
+        Navigation.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 130, 60));
 
         New_Manager.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 270, 560));
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Select Account Type:");
-        New_Manager.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 150, 30));
+        New_Manager.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 190, 40));
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Password:");
-        New_Manager.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 430, 80, 30));
+        New_Manager.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 430, 120, 40));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Confirm Password:");
-        New_Manager.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 480, 140, 30));
+        New_Manager.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 480, 180, 40));
 
         check1.setBackground(new java.awt.Color(255, 255, 255));
         check1.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
@@ -406,7 +421,7 @@ public class CU_Admin extends javax.swing.JFrame {
                 check1ActionPerformed(evt);
             }
         });
-        New_Manager.add(check1, new org.netbeans.lib.awtextra.AbsoluteConstraints(764, 430, -1, 30));
+        New_Manager.add(check1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 430, 30, 40));
 
         MR_username.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         MR_username.addActionListener(new java.awt.event.ActionListener() {
@@ -414,7 +429,7 @@ public class CU_Admin extends javax.swing.JFrame {
                 MR_usernameActionPerformed(evt);
             }
         });
-        New_Manager.add(MR_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 280, 330, 30));
+        New_Manager.add(MR_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 280, 370, 40));
 
         MR_passwordConfirm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         MR_passwordConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -422,7 +437,7 @@ public class CU_Admin extends javax.swing.JFrame {
                 MR_passwordConfirmActionPerformed(evt);
             }
         });
-        New_Manager.add(MR_passwordConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 480, 304, 30));
+        New_Manager.add(MR_passwordConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 480, 340, 40));
 
         MR_password.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         MR_password.addActionListener(new java.awt.event.ActionListener() {
@@ -430,13 +445,13 @@ public class CU_Admin extends javax.swing.JFrame {
                 MR_passwordActionPerformed(evt);
             }
         });
-        New_Manager.add(MR_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 430, 304, 30));
+        New_Manager.add(MR_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 430, 340, 40));
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Last Name:");
-        New_Manager.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 230, 80, 30));
+        New_Manager.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 230, 120, 40));
 
         Lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Lname.addActionListener(new java.awt.event.ActionListener() {
@@ -444,13 +459,13 @@ public class CU_Admin extends javax.swing.JFrame {
                 LnameActionPerformed(evt);
             }
         });
-        New_Manager.add(Lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 330, 30));
+        New_Manager.add(Lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 230, 370, 40));
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("  First Name:");
-        New_Manager.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 180, 90, 30));
+        New_Manager.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 180, 130, 40));
 
         Fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Fname.addActionListener(new java.awt.event.ActionListener() {
@@ -458,13 +473,13 @@ public class CU_Admin extends javax.swing.JFrame {
                 FnameActionPerformed(evt);
             }
         });
-        New_Manager.add(Fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 180, 330, 30));
+        New_Manager.add(Fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 180, 370, 40));
 
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Phone Number:");
-        New_Manager.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 530, 130, 30));
+        New_Manager.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 530, 170, 40));
 
         PhoneNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         PhoneNum.addActionListener(new java.awt.event.ActionListener() {
@@ -472,7 +487,7 @@ public class CU_Admin extends javax.swing.JFrame {
                 PhoneNumActionPerformed(evt);
             }
         });
-        New_Manager.add(PhoneNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 530, 330, 30));
+        New_Manager.add(PhoneNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 530, 370, 40));
 
         type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Employee", "Admin" }));
         type.addActionListener(new java.awt.event.ActionListener() {
@@ -480,13 +495,13 @@ public class CU_Admin extends javax.swing.JFrame {
                 typeActionPerformed(evt);
             }
         });
-        New_Manager.add(type, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 330, 330, 30));
+        New_Manager.add(type, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 330, 370, 40));
 
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Username:");
-        New_Manager.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 280, 80, 30));
+        New_Manager.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 280, 120, 40));
 
         status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Active" }));
         status.addActionListener(new java.awt.event.ActionListener() {
@@ -494,13 +509,13 @@ public class CU_Admin extends javax.swing.JFrame {
                 statusActionPerformed(evt);
             }
         });
-        New_Manager.add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 380, 330, 30));
+        New_Manager.add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 370, 40));
 
-        jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setText("Select Account Status:");
-        New_Manager.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, 160, 30));
+        New_Manager.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, 200, 40));
 
         add.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -515,13 +530,13 @@ public class CU_Admin extends javax.swing.JFrame {
         });
         add.setLayout(null);
 
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("Add");
         add.add(jLabel11);
-        jLabel11.setBounds(0, 10, 90, 10);
+        jLabel11.setBounds(0, 10, 120, 20);
 
-        New_Manager.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 620, 90, 30));
+        New_Manager.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 610, 120, 40));
 
         update.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -536,13 +551,13 @@ public class CU_Admin extends javax.swing.JFrame {
         });
         update.setLayout(null);
 
-        jLabel17.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Update");
         update.add(jLabel17);
-        jLabel17.setBounds(0, 10, 90, 10);
+        jLabel17.setBounds(0, 10, 120, 20);
 
-        New_Manager.add(update, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 620, 90, 30));
+        New_Manager.add(update, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 610, 120, 40));
 
         delete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -557,13 +572,13 @@ public class CU_Admin extends javax.swing.JFrame {
         });
         delete.setLayout(null);
 
-        jLabel18.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Delete");
         delete.add(jLabel18);
-        jLabel18.setBounds(0, 10, 90, 10);
+        jLabel18.setBounds(0, 10, 120, 22);
 
-        New_Manager.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 620, 90, 30));
+        New_Manager.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 610, 120, 40));
 
         UID.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         UID.setEnabled(false);
@@ -572,13 +587,13 @@ public class CU_Admin extends javax.swing.JFrame {
                 UIDActionPerformed(evt);
             }
         });
-        New_Manager.add(UID, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 330, 30));
+        New_Manager.add(UID, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 130, 370, 40));
 
-        jLabel20.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("User ID:");
-        New_Manager.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, 90, 30));
+        New_Manager.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, 130, 40));
 
         check2.setBackground(new java.awt.Color(255, 255, 255));
         check2.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
@@ -588,7 +603,7 @@ public class CU_Admin extends javax.swing.JFrame {
                 check2ActionPerformed(evt);
             }
         });
-        New_Manager.add(check2, new org.netbeans.lib.awtextra.AbsoluteConstraints(764, 480, -1, 30));
+        New_Manager.add(check2, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 480, 30, 40));
 
         jPanel1.setLayout(null);
         jPanel1.add(image);
@@ -609,13 +624,13 @@ public class CU_Admin extends javax.swing.JFrame {
         });
         Remove.setLayout(null);
 
-        jLabel21.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel21.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("Remove");
         Remove.add(jLabel21);
-        jLabel21.setBounds(0, 10, 90, 10);
+        jLabel21.setBounds(0, 10, 100, 20);
 
-        New_Manager.add(Remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 340, 90, 30));
+        New_Manager.add(Remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 340, 100, 40));
 
         Select.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -630,13 +645,13 @@ public class CU_Admin extends javax.swing.JFrame {
         });
         Select.setLayout(null);
 
-        jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel22.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel22.setText("Select");
         Select.add(jLabel22);
-        jLabel22.setBounds(0, 10, 90, 10);
+        jLabel22.setBounds(0, 10, 100, 20);
 
-        New_Manager.add(Select, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 340, 90, 30));
+        New_Manager.add(Select, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 340, 100, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -776,7 +791,7 @@ public class CU_Admin extends javax.swing.JFrame {
                     logEvent(userId, uname2, "Admin Added Account: "+uname);
 
 
-                    Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING );
+//                    Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING );
                     JOptionPane.showMessageDialog(null, "Registered succesfully!");
                     U_Admin ua = new U_Admin();
                     ua.setVisible(true);
@@ -790,7 +805,7 @@ public class CU_Admin extends javax.swing.JFrame {
                     this.dispose();
                 }
 //                }
-            } catch(IOException  | NoSuchAlgorithmException ex)
+            } catch(NoSuchAlgorithmException ex)
             {
                 System.out.println("" + ex);
             }
@@ -983,7 +998,6 @@ public class CU_Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_RemoveMouseExited
 
     private void SelectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SelectMouseClicked
-//         imageuploadjava.txt 
         JFileChooser fileChooser = new JFileChooser();
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -1014,6 +1028,16 @@ public class CU_Admin extends javax.swing.JFrame {
     private void SelectMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SelectMouseExited
         Select.setBackground(d);
     }//GEN-LAST:event_SelectMouseExited
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1052,6 +1076,7 @@ public class CU_Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Backbround;
     public javax.swing.JTextField Fname;
     private javax.swing.JPanel Header;
     public javax.swing.JTextField Lname;
@@ -1075,7 +1100,6 @@ public class CU_Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;

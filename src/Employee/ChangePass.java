@@ -10,6 +10,7 @@ import admin.*;
 import java.awt.Color;
 import Startups.StartupPanel;
 import config.Session;
+import config.Usables;
 import config.dbConnect;
 import config.passwordHasher;
 import java.security.NoSuchAlgorithmException;
@@ -24,11 +25,15 @@ import javax.swing.JOptionPane;
 public class ChangePass extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(145, 101, 88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181, 126, 110);
+    public final Usables use = new Usables();
+    
     public ChangePass() {
         initComponents();
+        use.setImageToLabel(Backbround, "src/image/MovieCollage.jpg");
+
     }
     
     
@@ -78,11 +83,6 @@ public class ChangePass extends javax.swing.JFrame {
         Main = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        Navigation = new javax.swing.JPanel();
-        logout = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        acc_id = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         Cpassword = new javax.swing.JPasswordField();
@@ -94,6 +94,9 @@ public class ChangePass extends javax.swing.JFrame {
         check1 = new javax.swing.JCheckBox();
         check2 = new javax.swing.JCheckBox();
         check3 = new javax.swing.JCheckBox();
+        logout = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        Backbround = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -102,10 +105,11 @@ public class ChangePass extends javax.swing.JFrame {
             }
         });
 
-        Main.setBackground(new java.awt.Color(51, 51, 51));
+        Main.setBackground(new java.awt.Color(0, 0, 0));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -116,38 +120,6 @@ public class ChangePass extends javax.swing.JFrame {
         Header.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 1310, 40));
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
-
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
-        Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        logout.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logoutMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                logoutMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                logoutMouseExited(evt);
-            }
-        });
-        logout.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Back");
-        logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
-
-        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 130, 40));
-
-        acc_id.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_id.setForeground(new java.awt.Color(255, 255, 255));
-        acc_id.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_id.setText("ID");
-        Navigation.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 30));
-        Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-70, -40, 380, 430));
-
-        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 310, 560));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -161,6 +133,7 @@ public class ChangePass extends javax.swing.JFrame {
         jLabel5.setText("Confirm Password:");
         Main.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 350, 140, 30));
 
+        Cpassword.setBackground(new java.awt.Color(181, 126, 110));
         Cpassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Cpassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,6 +142,7 @@ public class ChangePass extends javax.swing.JFrame {
         });
         Main.add(Cpassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 350, 330, 30));
 
+        oldPassword.setBackground(new java.awt.Color(181, 126, 110));
         oldPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         oldPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,6 +157,7 @@ public class ChangePass extends javax.swing.JFrame {
         jLabel8.setText("Enter Old Pass:");
         Main.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 250, 130, 30));
 
+        confirm.setBackground(new java.awt.Color(181, 126, 110));
         confirm.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 confirmMouseClicked(evt);
@@ -196,14 +171,16 @@ public class ChangePass extends javax.swing.JFrame {
         });
         confirm.setLayout(null);
 
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("Save");
         confirm.add(jLabel11);
-        jLabel11.setBounds(0, 10, 90, 17);
+        jLabel11.setBounds(0, 10, 110, 22);
 
-        Main.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 430, 90, 30));
+        Main.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 430, 110, 40));
 
+        newPassword.setBackground(new java.awt.Color(181, 126, 110));
         newPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         newPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,6 +222,25 @@ public class ChangePass extends javax.swing.JFrame {
         });
         Main.add(check3, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 350, -1, -1));
 
+        logout.setBackground(new java.awt.Color(181, 126, 110));
+        logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutMouseClicked(evt);
+            }
+        });
+        logout.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Back");
+        logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
+
+        Main.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, 130, 40));
+
+        Backbround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/MovieCollage.jpg"))); // NOI18N
+        Main.add(Backbround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1320, 560));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -258,21 +254,6 @@ public class ChangePass extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
-        Session sess = Session.getInstance();
-        EmployeeDashboard ed = new EmployeeDashboard();
-        ed.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_logoutMouseClicked
-
-    private void logoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseEntered
-        logout.setBackground(h);
-    }//GEN-LAST:event_logoutMouseEntered
-
-    private void logoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseExited
-        logout.setBackground(d);
-    }//GEN-LAST:event_logoutMouseExited
 
     private void CpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CpasswordActionPerformed
         // TODO add your handling code here:
@@ -377,7 +358,6 @@ public class ChangePass extends javax.swing.JFrame {
            this.dispose();
        }else
        {
-           acc_id.setText("" + sess.getUid());
        }
     }//GEN-LAST:event_formWindowActivated
 
@@ -410,6 +390,12 @@ public class ChangePass extends javax.swing.JFrame {
             Cpassword.setEchoChar('*');
         }
     }//GEN-LAST:event_check3ActionPerformed
+
+    private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
+        EmployeeDashboard ed = new EmployeeDashboard();
+        ed.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_logoutMouseClicked
 
     /**
      * @param args the command line arguments
@@ -448,11 +434,10 @@ public class ChangePass extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Backbround;
     private javax.swing.JPasswordField Cpassword;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Main;
-    private javax.swing.JPanel Navigation;
-    private javax.swing.JLabel acc_id;
     private javax.swing.JCheckBox check1;
     private javax.swing.JCheckBox check2;
     private javax.swing.JCheckBox check3;
@@ -460,7 +445,6 @@ public class ChangePass extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;

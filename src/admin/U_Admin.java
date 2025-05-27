@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import net.proteanit.sql.DbUtils;
 import Startups.Login;
 import config.Session;
+import config.Usables;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,6 +33,8 @@ public class U_Admin extends javax.swing.JFrame {
     Color h = new Color(51,51,255);
     private Color D;
     Color d = new Color(240,240,240);
+    public final Usables use = new Usables();
+
     
     public U_Admin() {
         initComponents();
@@ -294,11 +297,17 @@ public class U_Admin extends javax.swing.JFrame {
         jEditorPane1 = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
-        Main.setBackground(new java.awt.Color(39, 39, 39));
+        Main.setBackground(new java.awt.Color(0, 0, 0));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -310,7 +319,7 @@ public class U_Admin extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
+        Navigation.setBackground(new java.awt.Color(158, 98, 80));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -395,7 +404,7 @@ public class U_Admin extends javax.swing.JFrame {
         jLabel11.setBounds(100, 10, 80, 22);
 
         Navigation.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 300, 40));
-        Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, -80, 380, 220));
+        Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 70, 70));
 
         Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 540));
 
@@ -409,7 +418,7 @@ public class U_Admin extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(account_table);
 
-        Main.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 210, 1020, 430));
+        Main.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 100, 1020, 540));
 
         jScrollPane2.setViewportView(jEditorPane1);
 
@@ -543,6 +552,16 @@ public class U_Admin extends javax.swing.JFrame {
     private void deleteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseExited
         delete.setBackground(d);
     }//GEN-LAST:event_deleteMouseExited
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

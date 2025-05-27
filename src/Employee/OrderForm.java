@@ -20,6 +20,7 @@ import Startups.Login;
 import static admin.CU_Admin.phone;
 import static admin.CU_Admin.usname;
 import config.Session;
+import config.Usables;
 import static java.awt.Color.black;
 import static java.awt.Color.red;
 import java.awt.Image;
@@ -47,75 +48,78 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 public class OrderForm extends javax.swing.JFrame {
 
-     private Color H;
-    Color h = new Color(51,51,255);
+    private Color H;
+    Color h = new Color(145, 101, 88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181, 126, 110);
+    public final Usables use = new Usables();
     
-    public OrderForm() {
+    public OrderForm() 
+    {
         initComponents();
         NotShowDeletedUsers();
-//    displayData();
+        /*displayData();*/
+        
+        Payment.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        updateChange();
+    }
 
-Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                updateTotal();
+    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+        updateChange();
+    }
+
+    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+        updateChange();
+    }
+
+    private void updateChange() {
+        try {
+            String payment = Payment.getText().trim();
+            String priceText = Price.getText().trim();
+
+            System.out.println("[DEBUG] Payment entered: " + payment);
+            System.out.println("[DEBUG] Price value: " + priceText);
+
+            if (payment.isEmpty()) {
+                Change.setText("0");
+                System.out.println("[DEBUG] Empty payment. Change set to 0.");
+                return;
             }
 
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                updateTotal();
+            if (!payment.matches("\\d+(\\.\\d+)?")) {
+                Change.setText("Payment must be a number");
+                System.out.println("[DEBUG] Invalid payment input.");
+                return;
             }
 
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                updateTotal();
-            }
+            int py = Integer.parseInt(payment);
+            int pr = Integer.parseInt(priceText.isEmpty() ? "0" : priceText);
+            int ch = py - pr;
 
-            private void updateTotal() {
-                try {
-                    String qtyText = Qnty.getText().trim();
-//                    System.out.println("[DEBUG] Quantity text: '" + qtyText + "'");
-
-                    if (qtyText.isEmpty()) {
-                        Price.setText("0");
-//                        System.out.println("[DEBUG] Empty quantity. Setting total to 0.");
-                        return;
-                    }
-
-                    int q = Integer.parseInt(qtyText);
-                    String pid = PID.getText().trim();
-
-                    if (pid.isEmpty()) {
-                        Price.setText("0");
-//                        System.out.println("[DEBUG] No product selected. Setting total to 0.");
-                        return;
-                    }
-
-                    dbConnect dbc = new dbConnect();
-                    ResultSet rs = dbc.getData("SELECT * FROM tbl_products WHERE p_id = '" + pid + "'");
-                    if (rs.next()) {
-                        int price = rs.getInt("p_price");
-                        int total = q * price;
-//                        System.out.println("[DEBUG] Price: " + price + ", Total: " + total);
-
-                        Price.setText("" + total); // <<< Notice this
-//                        addClickable = false;
-//                        con.setForeground(red);
-
-//                        System.out.println("[DEBUG] Total updated (live).");
-                    } else {
-                        Price.setText("0");
-//                        System.out.println("[DEBUG] Product not found. Setting total to 0.");
-                    }
-                } catch (NumberFormatException e) {
-                    Price.setText("0");
-                    System.out.println(""+e);
-//                    System.out.println("[ERROR] Invalid quantity format: " + e);
-                } catch (SQLException e) {
-                    System.out.println(""+e);
-//                    System.out.println("[ERROR] SQL Exception: " + e);
+            if (py >= pr) {
+                if (py > pr) {
+                    Change.setText("" + ch);
+                    System.out.println("[DEBUG] Payment > Price. Change: " + ch);
+                } else { // py == pr
+                    Change.setText("0");
+                    System.out.println("[DEBUG] Payment == Price. No change.");
                 }
+            } else if (py < pr) {
+                Change.setText("Insufficient Cash");
+                System.out.println("[DEBUG] Payment < Price. Not enough cash.");
+            } else {
+                Change.setText("Error 2");
+                System.out.println("[DEBUG] Unknown logic path (should not occur).");
             }
-        });
+
+        } catch (NumberFormatException e) {
+            Change.setText("0");
+            System.out.println("[ERROR] Invalid number format: " + e.getMessage());
+        }
+    }
+});
+
 
     }
     
@@ -286,7 +290,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
                 
 
                 // Check if the user status is not "Deleted"
-                if (!status.equals("Deleted")) {
+                if (!status.equals("Deleted") && !status.equals("Unavailable")) {
                     
                     // Add the row to the list
                     rowData.add(new Object[]{
@@ -513,13 +517,22 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
         Qnty = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         Payment = new javax.swing.JTextField();
+        Change = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
-        Main.setBackground(new java.awt.Color(39, 39, 39));
+        Main.setBackground(new java.awt.Color(158, 98, 80));
+        Main.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -597,6 +610,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
         jLabel20.setText("Product ID:");
         Main.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 90, 30));
 
+        add.setBackground(new java.awt.Color(181, 126, 110));
         add.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 addMouseClicked(evt);
@@ -611,6 +625,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
         add.setLayout(null);
 
         con.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        con.setForeground(new java.awt.Color(255, 255, 255));
         con.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         con.setText("CONFIRM");
         add.add(con);
@@ -618,6 +633,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
 
         Main.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 600, 150, 40));
 
+        logout.setBackground(new java.awt.Color(181, 126, 110));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -632,6 +648,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
         logout.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Back");
         logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
@@ -664,12 +681,32 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
         Main.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 120, 30));
 
         Payment.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Payment.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PaymentMouseClicked(evt);
+            }
+        });
         Payment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PaymentActionPerformed(evt);
             }
         });
         Main.add(Payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 330, 30));
+
+        Change.setEditable(false);
+        Change.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Change.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeActionPerformed(evt);
+            }
+        });
+        Main.add(Change, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 420, 330, 30));
+
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Change:");
+        Main.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 100, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -729,7 +766,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
             } else if (!Qnty.getText().matches("\\d+")) 
             {
                 JOptionPane.showMessageDialog(null, "Quantity Must Only Contain Numbers");
-            }else if (!py.matches("\\d+")) 
+            }else if (!py.matches("\\d+(\\.\\d+)?")) 
             {
                 JOptionPane.showMessageDialog(null, "Payment Must Only Contain Numbers");
             }else if (price > payment) 
@@ -803,8 +840,46 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
                         logEvent(userId, uname2, "User made transaction ID: " + mn);
 
                         JOptionPane.showMessageDialog(null, "Added succesfully!");
-                        EmployeeDashboard ed = new EmployeeDashboard();
-                        ed.setVisible(true);
+                        ReceiptForm rf = new ReceiptForm();
+                        
+                        
+                        
+                        
+                        
+                        // === Generate Receipt ===
+                        System.out.println("Test start");
+                        rf.area.setText("*********************************************\n");
+                        rf.area.setText(rf.area.getText() + "*              Theather's Receipt System         *\n");
+                        rf.area.setText(rf.area.getText() + "*********************************************\n");
+
+                        Date obj = new Date();
+                        String now = obj.toString();
+                        rf.area.setText(rf.area.getText() + "\nDate: " + now + "\n");
+                        rf.area.setText(rf.area.getText() + "---------------------------------------------\n");
+
+                        rf.area.setText(rf.area.getText() + "Transaction ID   : " + mn + "\n");
+                        rf.area.setText(rf.area.getText() + "Product ID       : " + pid + "\n");
+                        rf.area.setText(rf.area.getText() + "Quantity         : " + q + "\n");
+                        rf.area.setText(rf.area.getText() + "Price (each)     : " + (price / q) + "\n"); // single item price
+                        rf.area.setText(rf.area.getText() + "Total Price      : " + price + "\n");
+                        rf.area.setText(rf.area.getText() + "Amount Paid      : " + payment + "\n");
+                        rf.area.setText(rf.area.getText() + "Change           : " + (payment - price) + "\n");
+
+                        rf.area.setText(rf.area.getText() + "---------------------------------------------\n");
+                        rf.area.setText(rf.area.getText() + "Status           : Successful\n");
+                        rf.area.setText(rf.area.getText() + "Handled by       : " + uname2 + "\n");
+                        rf.area.setText(rf.area.getText() + "*********************************************\n");
+                        rf.area.setText(rf.area.getText() + "*         THANK YOU FOR YOUR PURCHASE!      *\n");
+                        rf.area.setText(rf.area.getText() + "*********************************************\n");
+                        System.out.println("Test end");
+
+                        
+                        
+                        
+                        
+                        
+                        
+                        rf.setVisible(true);
                         this.dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "An error occured");
@@ -911,6 +986,57 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
     }
     }//GEN-LAST:event_QntyMouseClicked
 
+    private void ChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeActionPerformed
+
+    private void PaymentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PaymentMouseClicked
+//        here //Needs to be the same as qnty function
+//        String payment = Payment.getText().trim();
+//        int py = Integer.parseInt(Payment.getText().trim());
+//        int pr = Integer.parseInt(Price.getText().trim());
+//        int ch = 0;
+//        
+//        if(payment.matches("\\d+(\\.\\d+)?"))
+//        {
+//            if(py >= pr)
+//            {
+//                if(py > pr)
+//                {
+//                    ch = py - pr;
+//                    Change.setText(""+ch);
+//                }else if(py == pr)
+//                {
+//                    ch = py - pr;
+//                    Change.setText("0");
+//                }else
+//                {
+//                    Change.setText("Error 1");
+//                }
+//            }else if(py < pr)
+//            {
+//                Change.setText("Insufficient Cash");
+//            }else 
+//            {
+//                Change.setText("Error 2");
+//            }
+//        }else if (!payment.matches("\\d+(\\.\\d+)?")) 
+//        {
+//            Change.setText("Payment must be Integer");
+//
+//        }
+    }//GEN-LAST:event_PaymentMouseClicked
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
@@ -954,6 +1080,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JTextField Change;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Main;
     public javax.swing.JTextField Mname;
@@ -967,6 +1094,7 @@ Qnty.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

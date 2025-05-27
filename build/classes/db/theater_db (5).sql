@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2025 at 06:24 AM
+-- Generation Time: May 27, 2025 at 09:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -246,7 +246,28 @@ INSERT INTO `tbl_logs` (`log_id`, `u_id`, `u_username`, `action_time`, `log_acti
 (262, 2, 'dannyboy', '2025-04-29 09:07:31', 'Logged Out'),
 (263, 2, 'dannyboy', '2025-04-29 09:07:40', 'Logged as Employee'),
 (264, 1, 'Johnparker', '2025-05-05 02:33:16', 'Logged as Admin'),
-(265, 1, 'Johnparker', '2025-05-05 02:33:33', 'Admin Added The Movie: Avatar');
+(265, 1, 'Johnparker', '2025-05-05 02:33:33', 'Admin Added The Movie: Avatar'),
+(266, 1, 'Johnparker', '2025-05-25 08:34:15', 'Logged as Admin'),
+(267, 1, 'Johnparker', '2025-05-25 08:35:07', 'Admin Added The Movie: test'),
+(268, 1, 'Johnparker', '2025-05-25 08:35:49', 'Admin Updated The Movie: Howl Moving Castle'),
+(269, 1, 'Johnparker', '2025-05-25 08:42:06', 'Admin Updated The Movie: Howl Moving Castle'),
+(270, 1, 'Johnparker', '2025-05-25 08:44:27', 'Admin Updated The Movie: Howl Moving Castle'),
+(271, 1, 'Johnparker', '2025-05-25 08:50:02', 'Logged as Admin'),
+(272, 1, 'Johnparker', '2025-05-25 08:51:35', 'Logged as Admin'),
+(273, 1, 'Johnparker', '2025-05-25 08:52:01', 'Admin Updated The Movie: Avatar'),
+(274, 1, 'Johnparker', '2025-05-25 08:52:26', 'Admin Updated The Movie: The Matrix'),
+(275, 1, 'Johnparker', '2025-05-25 08:53:21', 'Admin Added The Movie: Song of the Sea'),
+(276, 1, 'Johnparker', '2025-05-25 12:07:40', 'Logged as Admin'),
+(277, 1, 'Johnparker', '2025-05-25 12:07:45', 'Logged Out'),
+(278, 2, 'dannyboy', '2025-05-25 12:07:57', 'Logged as Employee'),
+(279, 2, 'dannyboy', '2025-05-26 01:17:03', 'Logged as Employee'),
+(280, 2, 'dannyboy', '2025-05-26 01:17:22', 'Logged Out'),
+(281, 1, 'Johnparker', '2025-05-26 01:17:36', 'Logged as Admin'),
+(282, 1, 'Johnparker', '2025-05-26 02:05:47', 'Logged as Admin'),
+(283, 2, 'dannyboy', '2025-05-26 13:57:27', 'Logged as Employee'),
+(284, 1, 'Johnparker', '2025-05-27 02:06:06', 'Logged as Admin'),
+(285, 1, 'Johnparker', '2025-05-27 02:06:22', 'Logged Out'),
+(286, 2, 'dannyboy', '2025-05-27 02:06:35', 'Logged as Employee');
 
 -- --------------------------------------------------------
 
@@ -295,8 +316,10 @@ CREATE TABLE `tbl_products` (
 --
 
 INSERT INTO `tbl_products` (`p_id`, `p_name`, `p_price`, `p_quantity`, `p_status`, `p_image`, `p_sold`) VALUES
-(1, 'The Matrix', 500.00, 13, 'Available', '', '2'),
-(2, 'Avatar', 100.00, 100, 'Available', '', '');
+(1, 'The Matrix', 500.00, 13, 'Available', 'src/userimages/Matrix.jpg', '2'),
+(2, 'Avatar', 100.00, 100, 'Available', 'src/userimages/Avatar Poster 2009.jpg', ''),
+(3, 'Howl Moving Castle', 100.00, 80, 'Available', 'src/userimages/Howls Moving Castle (2004).jpg', ''),
+(4, 'Song of the Sea', 100.00, 80, 'Available', 'src/userimages/Song of the sea.jpg', '');
 
 --
 -- Indexes for dumped tables
@@ -343,7 +366,7 @@ ALTER TABLE `tbl_accounts`
 -- AUTO_INCREMENT for table `tbl_logs`
 --
 ALTER TABLE `tbl_logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=287;
 
 --
 -- AUTO_INCREMENT for table `tbl_orders`
@@ -355,7 +378,7 @@ ALTER TABLE `tbl_orders`
 -- AUTO_INCREMENT for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
-  MODIFY `p_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `p_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

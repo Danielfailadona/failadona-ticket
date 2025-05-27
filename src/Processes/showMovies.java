@@ -7,27 +7,44 @@ package Processes;
 
 import java.awt.Color;
 import Startups.StartupPanel;
+import config.Usables;
 import config.dbConnect;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 
 public class showMovies extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(145, 101, 88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181, 126, 110);
+    public final Usables use = new Usables();
     
     
     public showMovies() {
         initComponents();
         this.setResizable(false);
         NotShowDeletedUsers();
+//        use.setImageToLabel(image, lastUsedImagePath);
+
     }
     
     
@@ -49,7 +66,7 @@ public class showMovies extends javax.swing.JFrame {
                 String qnty = rs.getString("p_quantity");
 
                 // Check if the user status is not "Deleted"
-                if (!status.equals("Deleted")) {
+                if (!status.equals("Deleted") && !status.equals("Unavailable")) {
 
                     // Add the row to the list
                     rowData.add(new Object[]{
@@ -90,6 +107,92 @@ public class showMovies extends javax.swing.JFrame {
     
     
     
+    public String destination = "";
+    File selectedFile;
+    public String oldpath;
+    public String path;
+    public String lastUsedImagePath = null; // ✅ Store the last image path used
+
+    public int FileExistenceChecker(String path) {
+        File file = new File(path);
+        String fileName = file.getName();
+
+        Path filePath = Paths.get("src/userimages", fileName);
+        boolean fileExists = Files.exists(filePath);
+
+        if (fileExists) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            System.out.println("desiredWidth: " + desiredWidth);
+            File imageFile = new File(imagePath);
+            System.out.println("imagePath: " + imagePath);
+            BufferedImage image = ImageIO.read(imageFile);
+
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            return newHeight;
+        } catch (IOException ex) {
+            System.out.println("" + ex);
+        }
+
+        return -1;
+    }
+
+    public ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+        // ✅ Store the image path for later retrieval
+        lastUsedImagePath = ImagePath;
+
+        ImageIcon MyImage = null;
+        if (ImagePath != null) {
+            MyImage = new ImageIcon(ImagePath);
+        } else {
+            MyImage = new ImageIcon(pic);
+        }
+
+        int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        return image;
+    }
+
+// ✅ You can now retrieve the image path elsewhere like this:
+// System.out.println("Tracejectory: " + lastUsedImagePath);
+    public void imageUpdater(String existingFilePath, String newFilePath) {
+        File existingFile = new File(existingFilePath);
+        if (existingFile.exists()) {
+            String parentDirectory = existingFile.getParent();
+            File newFile = new File(newFilePath);
+            String newFileName = newFile.getName();
+            File updatedFile = new File(parentDirectory, newFileName);
+            existingFile.delete();
+            try {
+                Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Image updated successfully.");
+            } catch (IOException e) {
+                System.out.println("Error occurred while updating the image: " + e);
+            }
+        } else {
+            try {
+                Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                System.out.println("Error on update!");
+            }
+        }
+    }
+
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,6 +207,8 @@ public class showMovies extends javax.swing.JFrame {
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         Navigation = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        image = new javax.swing.JLabel();
         cancel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -114,7 +219,8 @@ public class showMovies extends javax.swing.JFrame {
         Showing_Movies.setBackground(new java.awt.Color(39, 39, 39));
         Showing_Movies.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -126,9 +232,18 @@ public class showMovies extends javax.swing.JFrame {
 
         Showing_Movies.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(51, 51, 51));
+        Navigation.setBackground(new java.awt.Color(158, 98, 80));
+        Navigation.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setBackground(new java.awt.Color(158, 98, 80));
+        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
+        jPanel1.setLayout(null);
+        jPanel1.add(image);
+        image.setBounds(140, 20, 360, 440);
+
+        cancel.setBackground(new java.awt.Color(181, 126, 110));
+        cancel.setForeground(new java.awt.Color(255, 255, 255));
         cancel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cancelMouseClicked(evt);
@@ -142,12 +257,16 @@ public class showMovies extends javax.swing.JFrame {
         });
         cancel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Back");
-        cancel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 8, 90, -1));
+        cancel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 8, 140, -1));
 
-        Navigation.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 510, -1, 30));
+        jPanel1.add(cancel);
+        cancel.setBounds(10, 490, 140, 40);
+
+        Navigation.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 630, 550));
 
         Showing_Movies.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 630, 540));
 
@@ -159,6 +278,11 @@ public class showMovies extends javax.swing.JFrame {
 
             }
         ));
+        showMovies_table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                showMovies_tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(showMovies_table);
 
         Showing_Movies.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, 690, 540));
@@ -191,6 +315,39 @@ public class showMovies extends javax.swing.JFrame {
     private void cancelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseExited
         cancel.setBackground(d);
     }//GEN-LAST:event_cancelMouseExited
+
+    private void showMovies_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showMovies_tableMouseClicked
+        int rowIndex = showMovies_table.getSelectedRow();
+
+//        if (rowIndex < 0) {
+//            JOptionPane.showMessageDialog(null, "Please select an Item");
+//        } else {
+//            CU_Admin cua = new CU_Admin();
+
+            try {
+                dbConnect dbc = new dbConnect();
+                TableModel tbl = showMovies_table.getModel();
+                ResultSet rs = dbc.getData("SELECT * FROM tbl_products WHERE p_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
+                if (rs.next()) {
+
+                    
+                    image.setIcon(ResizeImage(rs.getString("p_image"), null, image));
+                    oldpath = rs.getString("p_image");
+                    path = rs.getString("p_image");
+                    destination = rs.getString("p_image");
+                    
+//                    addClickable = false;
+//                    ad.setForeground(red);
+                    use.setImageToLabel(image, lastUsedImagePath);
+//                    System.out.println("lastUsedImagePath: "+lastUsedImagePath);
+
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("" + ex);
+            }
+//        }
+    }//GEN-LAST:event_showMovies_tableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -232,8 +389,10 @@ public class showMovies extends javax.swing.JFrame {
     private javax.swing.JPanel Navigation;
     private javax.swing.JPanel Showing_Movies;
     private javax.swing.JPanel cancel;
+    public javax.swing.JLabel image;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable showMovies_table;
     // End of variables declaration//GEN-END:variables

@@ -150,38 +150,195 @@ public class accountDetails extends javax.swing.JFrame {
 //================================================================================
     
     public static String Phone, usname;
-
+    
+    
+    
+//    public boolean updateCheck() {
+//        
+//        dbConnect dbc = new dbConnect();
+//        Session sess = Session.getInstance();
+//        int u = sess.getUid();
+//        String p = phone.getText().trim();
+//        String us = MR_username.getText().trim();
+//        dbConnect connector = new dbConnect();
+//
+//        
+//        
+//        try {
+//            String query2 = "SELECT * FROM tbl_accounts WHERE u_id = '" + sess.getUid() + "'";
+//            PreparedStatement pstmt = connector.getConnection().prepareStatement(query2);
+//
+//            ResultSet resultSet = pstmt.executeQuery();
+//
+//            if (resultSet.next()) {
+//                uCheck = resultSet.getInt("u_id");   // Update the outer `userId` correctly
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("SQL Exception: " + ex);
+//        }
+//        
+//        
+//        
+//
+//        try {
+//            String query = "SELECT * FROM tbl_accounts WHERE (u_username='" + us + "'OR u_phone='" + p + "') AND u_id != '" + u + "'";
+//
+//            System.out.println("u_username: " + us);
+//            System.out.println("u_phone: " + p);
+//            System.out.println("u_id: " + sess.getUid());
+//
+//            ResultSet resultSet = dbc.getData(query);
+//            if (resultSet.next()) {
+//                Phone = resultSet.getString("u_phone");
+//                if (Phone.equals(p) && ) {
+//                    JOptionPane.showMessageDialog(null, "Phone Number is Already Used");
+//                    phone.setText("");
+//                }
+//
+//                usname = resultSet.getString("u_username");
+//                if (usname.equals(us)) {
+//                    JOptionPane.showMessageDialog(null, "Username is Already Used");
+//                    MR_username.setText("");
+//                }
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("" + ex);
+//            return false;
+//        }
+//    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public boolean updateCheck() {
         dbConnect dbc = new dbConnect();
         Session sess = Session.getInstance();
         String p = phone.getText().trim();
         String us = MR_username.getText().trim();
+        int currentUID = sess.getUid();
+
+        System.out.println("[1] Trimmed input - Username: " + us);
+        System.out.println("[2] Trimmed input - Phone: " + p);
+        System.out.println("[3] Current Session UID: " + currentUID);
 
         try {
-            System.out.println("1");
-            String query = "SELECT * FROM tbl_accounts WHERE (u_username='" + us + "'OR u_phone='" + p + "') AND u_id != '" + sess.getUid() + "'";
-            ResultSet resultSet = dbc.getData(query);
-            if (resultSet.next()) {
-                Phone = resultSet.getString("u_phone");
-                if (Phone.equals(p)) {
-                    JOptionPane.showMessageDialog(null, "Phone Number is Already Used");
-                    phone.setText("");
-                }
+            String query = "SELECT u_id, u_username, u_phone FROM tbl_accounts WHERE (u_username = '" + us + "' OR u_phone = '" + p + "')";
+            System.out.println("[4] Executing query: " + query);
 
-                usname = resultSet.getString("u_username");
-                if (usname.equals(us)) {
-                    JOptionPane.showMessageDialog(null, "Username is Already Used");
-                    MR_username.setText("");
+            ResultSet resultSet = dbc.getData(query);
+            boolean isDuplicate = false;
+
+            while (resultSet.next()) {
+                int uid = resultSet.getInt("u_id");
+                String dbPhone = resultSet.getString("u_phone");
+                String dbUsername = resultSet.getString("u_username");
+
+                System.out.println("[5] Found row:");
+                System.out.println("     - UID: " + uid);
+                System.out.println("     - DB Phone: " + dbPhone);
+                System.out.println("     - DB Username: " + dbUsername);
+
+                if (uid != currentUID) {
+                    System.out.println("[6] UID mismatch — checking for duplicates...");
+
+                    if (dbPhone.equals(p)) {
+                        System.out.println("[7] Duplicate phone detected (UID: " + uid + ")");
+                        JOptionPane.showMessageDialog(null, "Phone Number is Already Used");
+                        phone.setText("");
+                        isDuplicate = true;
+                    }
+
+                    if (dbUsername.equals(us)) {
+                        System.out.println("[8] Duplicate username detected (UID: " + uid + ")");
+                        JOptionPane.showMessageDialog(null, "Username is Already Used");
+                        MR_username.setText("");
+                        isDuplicate = true;
+                    }
+                } else {
+                    System.out.println("[9] Match is from current user. Skipping.");
                 }
-                return true;
-            } else {
-                return false;
             }
+
+            System.out.println("[10] Final isDuplicate: " + isDuplicate);
+            return isDuplicate;
+
         } catch (SQLException ex) {
-            System.out.println("" + ex);
-            return false;
+            System.out.println("[ERROR] SQLException: " + ex.getMessage());
+            return true; // Assume duplicate to be safe
         }
-    }    
+    }
+
+
+
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    public boolean updateCheck() {
+//        dbConnect dbc = new dbConnect();
+//        Session sess = Session.getInstance();
+//        int u = sess.getUid();
+//        String p = phone.getText().trim();
+//        String us = MR_username.getText().trim();
+//
+//        try {
+//            String query = "SELECT * FROM tbl_accounts WHERE (u_username='" + us + "'OR u_phone='" + p + "') AND u_id != '" + u + "'";
+//
+//            System.out.println("u_username: " + us);
+//            System.out.println("u_phone: " + p);
+//            System.out.println("u_id: " + sess.getUid());
+//
+//            ResultSet resultSet = dbc.getData(query);
+//            if (resultSet.next()) {
+//                Phone = resultSet.getString("u_phone");
+//                if (Phone.equals(p)) {
+//                    JOptionPane.showMessageDialog(null, "Phone Number is Already Used");
+//                    phone.setText("");
+//                }
+//
+//                usname = resultSet.getString("u_username");
+//                if (usname.equals(us)) {
+//                    JOptionPane.showMessageDialog(null, "Username is Already Used");
+//                    MR_username.setText("");
+//                }
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("" + ex);
+//            return false;
+//        }
+//    }
+    
+    
+    
+    
+    
 //================================================================================
 
     public void logEvent(int userId, String username, String action) 
@@ -247,10 +404,6 @@ public class accountDetails extends javax.swing.JFrame {
         Main = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        Navigation = new javax.swing.JPanel();
-        logout = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         MR_username = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         Lname = new javax.swing.JTextField();
@@ -267,6 +420,8 @@ public class accountDetails extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         Select = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
+        logout = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -275,10 +430,11 @@ public class accountDetails extends javax.swing.JFrame {
             }
         });
 
-        Main.setBackground(new java.awt.Color(102, 102, 102));
+        Main.setBackground(new java.awt.Color(121, 75, 61));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -290,9 +446,138 @@ public class accountDetails extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(51, 51, 51));
-        Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        MR_username.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        MR_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MR_usernameActionPerformed(evt);
+            }
+        });
+        Main.add(MR_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 360, 560, 40));
 
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Last Name:");
+        Main.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 290, 110, 40));
+
+        Lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Lname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LnameActionPerformed(evt);
+            }
+        });
+        Main.add(Lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 290, 560, 40));
+
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("  First Name:");
+        Main.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, 120, 40));
+
+        Fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Fname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FnameActionPerformed(evt);
+            }
+        });
+        Main.add(Fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, 560, 40));
+
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Username:");
+        Main.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 360, 110, 40));
+
+        confirm.setBackground(new java.awt.Color(255, 255, 255));
+        confirm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                confirmMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                confirmMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                confirmMouseExited(evt);
+            }
+        });
+        confirm.setLayout(null);
+
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Confirm");
+        confirm.add(jLabel11);
+        jLabel11.setBounds(0, 10, 110, 20);
+
+        Main.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 520, 110, 40));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Phone");
+        Main.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 440, 110, 40));
+
+        phone.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        phone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phoneActionPerformed(evt);
+            }
+        });
+        Main.add(phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 440, 560, 40));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(null);
+
+        image.setBackground(new java.awt.Color(181, 126, 110));
+        jPanel1.add(image);
+        image.setBounds(10, 10, 190, 170);
+
+        Main.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 200, 210, 190));
+
+        Remove.setBackground(new java.awt.Color(255, 255, 255));
+        Remove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RemoveMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                RemoveMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                RemoveMouseExited(evt);
+            }
+        });
+        Remove.setLayout(null);
+
+        jLabel21.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setText("Remove");
+        Remove.add(jLabel21);
+        jLabel21.setBounds(0, 10, 110, 20);
+
+        Main.add(Remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 410, 110, 40));
+
+        Select.setBackground(new java.awt.Color(255, 255, 255));
+        Select.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SelectMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                SelectMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                SelectMouseExited(evt);
+            }
+        });
+        Select.setLayout(null);
+
+        jLabel22.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("Select");
+        Select.add(jLabel22);
+        jLabel22.setBounds(0, 10, 110, 20);
+
+        Main.add(Select, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 410, 110, 40));
+
+        logout.setBackground(new java.awt.Color(255, 255, 255));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -311,135 +596,7 @@ public class accountDetails extends javax.swing.JFrame {
         jLabel10.setText("Back");
         logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
 
-        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 130, 40));
-        Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-70, -40, 230, 80));
-
-        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 310, 560));
-
-        MR_username.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        MR_username.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MR_usernameActionPerformed(evt);
-            }
-        });
-        Main.add(MR_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 330, 400, 30));
-
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Last Name:");
-        Main.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 280, 80, 30));
-
-        Lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        Lname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LnameActionPerformed(evt);
-            }
-        });
-        Main.add(Lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 280, 400, 30));
-
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("  First Name:");
-        Main.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 230, 90, 30));
-
-        Fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        Fname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FnameActionPerformed(evt);
-            }
-        });
-        Main.add(Fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 230, 400, 30));
-
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Username:");
-        Main.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 80, 30));
-
-        confirm.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                confirmMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                confirmMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                confirmMouseExited(evt);
-            }
-        });
-        confirm.setLayout(null);
-
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Confirm");
-        confirm.add(jLabel11);
-        jLabel11.setBounds(0, 10, 90, 10);
-
-        Main.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 430, 90, 30));
-
-        jLabel12.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("Phone");
-        Main.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 380, 80, 30));
-
-        phone.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        phone.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                phoneActionPerformed(evt);
-            }
-        });
-        Main.add(phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 400, 30));
-
-        jPanel1.setLayout(null);
-        jPanel1.add(image);
-        image.setBounds(10, 10, 190, 170);
-
-        Main.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 230, 210, 190));
-
-        Remove.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                RemoveMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                RemoveMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                RemoveMouseExited(evt);
-            }
-        });
-        Remove.setLayout(null);
-
-        jLabel21.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel21.setText("Remove");
-        Remove.add(jLabel21);
-        jLabel21.setBounds(0, 10, 90, 10);
-
-        Main.add(Remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 440, 90, 30));
-
-        Select.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                SelectMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                SelectMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                SelectMouseExited(evt);
-            }
-        });
-        Select.setLayout(null);
-
-        jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel22.setText("Select");
-        Select.add(jLabel22);
-        jLabel22.setBounds(0, 10, 90, 10);
-
-        Main.add(Select, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 440, 90, 30));
+        Main.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, -1, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -511,8 +668,13 @@ public class accountDetails extends javax.swing.JFrame {
                         String at = rs.getString("u_type");
                         String s = rs.getString("u_status");
 
-                        if (dbc.insertData("INSERT INTO tbl_accounts (u_fname, u_lname, u_username, u_type, u_password, u_phone, u_status, u_image, security_question, security_answer) "
-                            + "VALUES ('" + fn + "', '" + ln + "', '" + uname + "', '" + at + "','" + npass + "', '" + p + "',  '" + s + "',  '" + destination + "',  '" + sq + "',  '" + sa + "')")) {
+                        dbc.updateData("UPDATE tbl_accounts SET u_fname = '" + fn + "', u_lname = '" + ln + "', u_username = '" + uname + "',"
+                                + " u_password = '" + npass + "', u_phone = '" + p + "', u_type = '" + at + "', u_status = '" + s + "', u_image = '" + destination + "', security_question= '" + sq + "', security_answer= '" + sa + "' WHERE u_id = '" + sess.getUid() + "'");
+                        
+                        
+//                        if (dbc.insertData("INSERT INTO tbl_accounts (u_fname, u_lname, u_username, u_type, u_password, u_phone, u_status, u_image, security_question, security_answer) "
+//                                + "VALUES ('" + fn + "', '" + ln + "', '" + uname + "', '" + at + "','" + npass + "', '" + p + "',  '" + s + "',  '" + destination + "',  '" + sq + "',  '" + sa + "')"))
+                        
 
                         try 
                         {
@@ -535,13 +697,13 @@ public class accountDetails extends javax.swing.JFrame {
                         ed.setVisible(true);
                         this.dispose();
 
-                        }else
-                        {
-                            JOptionPane.showMessageDialog(null, "Unknown Error Occured");
-                            EmployeeDashboard ed = new EmployeeDashboard();
-                            ed.setVisible(true);
-                            this.dispose();
-                        }
+//                        }else
+//                        {
+//                            JOptionPane.showMessageDialog(null, "Unknown Error Occured");
+//                            EmployeeDashboard ed = new EmployeeDashboard();
+//                            ed.setVisible(true);
+//                            this.dispose();
+//                        }
                     }
                 }catch (SQLException ex) {
                 System.out.println("" + ex);
@@ -579,6 +741,15 @@ public class accountDetails extends javax.swing.JFrame {
         acc_phone.setText("" + sess.getPhone());
         acc_id.setText("" + sess.getUid());
         }*/
+        
+        
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_formWindowActivated
 
     private void RemoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RemoveMouseClicked
@@ -672,7 +843,6 @@ public class accountDetails extends javax.swing.JFrame {
     public javax.swing.JTextField Lname;
     public javax.swing.JTextField MR_username;
     private javax.swing.JPanel Main;
-    private javax.swing.JPanel Navigation;
     public javax.swing.JPanel Remove;
     public javax.swing.JPanel Select;
     private javax.swing.JPanel confirm;
@@ -681,7 +851,6 @@ public class accountDetails extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel6;

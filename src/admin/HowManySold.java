@@ -19,6 +19,7 @@ import Startups.Login;
 import static admin.CU_Admin.phone;
 import static admin.CU_Admin.usname;
 import config.Session;
+import config.Usables;
 import static java.awt.Color.black;
 import static java.awt.Color.red;
 import java.awt.Image;
@@ -45,10 +46,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 public class HowManySold extends javax.swing.JFrame {
 
-     private Color H;
-    Color h = new Color(51,51,255);
+    private Color H;
+    Color h = new Color(51, 51, 255);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(240, 240, 240);
+    public final Usables use = new Usables();
     
     public HowManySold() {
         initComponents();
@@ -438,15 +440,21 @@ public class HowManySold extends javax.swing.JFrame {
         jEditorPane1 = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         Main.setBackground(new java.awt.Color(39, 39, 39));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
-        jLabel1.setFont(new java.awt.Font("Broadway", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Admin Dashboard");
@@ -454,7 +462,8 @@ public class HowManySold extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1350, 100));
 
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
+        Navigation.setBackground(new java.awt.Color(158, 98, 80));
+        Navigation.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -475,7 +484,7 @@ public class HowManySold extends javax.swing.JFrame {
         jLabel10.setText("Back");
         logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
 
-        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 493, 130, 40));
+        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 130, 40));
         Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, -80, 180, 80));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -484,6 +493,7 @@ public class HowManySold extends javax.swing.JFrame {
         jLabel7.setText("Amounts Sold");
         Navigation.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 110, 30));
 
+        Mname.setEditable(false);
         Mname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Mname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -508,7 +518,7 @@ public class HowManySold extends javax.swing.JFrame {
         jLabel20.setText("Product ID:");
         Navigation.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 90, 30));
 
-        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 470, 540));
+        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 470, 550));
 
         account_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -601,6 +611,16 @@ public class HowManySold extends javax.swing.JFrame {
             }   
         }
     }//GEN-LAST:event_account_tableMouseClicked
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

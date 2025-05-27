@@ -10,14 +10,23 @@ import admin.*;
 import java.awt.Color;
 import Startups.StartupPanel;
 import config.Session;
+import config.Usables;
 import config.dbConnect;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -31,12 +40,17 @@ import javax.swing.table.TableModel;
 public class EmployeeDashboard extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(145, 101, 88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181, 126, 110);
+    public final Usables use = new Usables();
+
     public EmployeeDashboard() {
         initComponents();
-        autoResizeExistingLabelImages(profile,Account_Details,Add_Recovery,Change_Pass,Purchase_Tickets);
+//        autoResizeExistingLabelImages(image,Account_Details,Add_Recovery,Change_Pass,Purchase_Tickets);
+//        use.setImageToLabel(Backbround, "src/image/MovieCollage.jpg");
+
+
     }
     
     
@@ -76,29 +90,124 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     
     
     
-    public void autoResizeExistingLabelImages(JLabel... labels) {
-        for (JLabel label : labels) {
-            Icon icon = label.getIcon();
+//    public void autoResizeExistingLabelImages(JLabel... labels) {
+//        for (JLabel label : labels) {
+//            Icon icon = label.getIcon();
+//
+//            if (icon instanceof ImageIcon) {
+//                ImageIcon imageIcon = (ImageIcon) icon;
+//                Image image = imageIcon.getImage();
+//
+//                int labelWidth = label.getWidth();
+//                int labelHeight = label.getHeight();
+//
+//                if (labelWidth > 0 && labelHeight > 0) {
+//                    Image scaledImage = image.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
+//                    label.setIcon(new ImageIcon(scaledImage));
+//                } else {
+//                    System.out.println("Label size is 0, skipping resize.");
+//                }
+//            } else {
+//                System.out.println("Label has no valid ImageIcon.");
+//            }
+//        }
+//    }
+    
+    
+    
+    
+    
+    public String destination = "";
+    File selectedFile;
+    public String oldpath;
+    public String path;
 
-            if (icon instanceof ImageIcon) {
-                ImageIcon imageIcon = (ImageIcon) icon;
-                Image image = imageIcon.getImage();
+    public int FileExistenceChecker(String path) {
+        File file = new File(path);
+        String fileName = file.getName();
 
-                int labelWidth = label.getWidth();
-                int labelHeight = label.getHeight();
+        Path filePath = Paths.get("src/userimages", fileName);
+        boolean fileExists = Files.exists(filePath);
 
-                if (labelWidth > 0 && labelHeight > 0) {
-                    Image scaledImage = image.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
-                    label.setIcon(new ImageIcon(scaledImage));
-                } else {
-                    System.out.println("Label size is 0, skipping resize.");
-                }
-            } else {
-                System.out.println("Label has no valid ImageIcon.");
+        if (fileExists) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            // Read the image file
+            System.out.println("desiredWidth: " + desiredWidth);
+            System.out.println("1");
+            File imageFile = new File(imagePath);
+            System.out.println("imagePath: " + imagePath);
+            System.out.println("imageFile: " + imageFile);
+            BufferedImage image = ImageIO.read(imageFile);
+            System.out.println("image: " + image);
+            System.out.println("2");
+
+            // Get the original width and height of the image
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+            System.out.println("3");
+
+            // Calculate the new height based on the desired width and the aspect ratio
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            System.out.println("4");
+
+            return newHeight;
+        } catch (IOException ex) {
+//            System.out.println("imagePath!"+imagePath); //Image path exists,  Must_Debug:False
+//            System.out.println("No image found!");
+            System.out.println("" + ex);
+        }
+
+        return -1;
+    }
+
+    public ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+        ImageIcon MyImage = null;
+        if (ImagePath != null) {
+            MyImage = new ImageIcon(ImagePath);
+        } else {
+            MyImage = new ImageIcon(pic);
+        }
+
+        int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        return image;
+    }
+
+    public void imageUpdater(String existingFilePath, String newFilePath) {
+        File existingFile = new File(existingFilePath);
+        if (existingFile.exists()) {
+            String parentDirectory = existingFile.getParent();
+            File newFile = new File(newFilePath);
+            String newFileName = newFile.getName();
+            File updatedFile = new File(parentDirectory, newFileName);
+            existingFile.delete();
+            try {
+                Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Image updated successfully.");
+            } catch (IOException e) {
+                System.out.println("Error occurred while updating the image: " + e);
+            }
+        } else {
+            try {
+                Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                System.out.println("Error on update!");
             }
         }
     }
     
+    
+
     
     
 
@@ -123,7 +232,8 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         acc_lname = new javax.swing.JLabel();
         acc_fname = new javax.swing.JLabel();
         acc_id = new javax.swing.JLabel();
-        profile = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        image = new javax.swing.JLabel();
         users = new javax.swing.JPanel();
         Account_Details = new javax.swing.JLabel();
         users1 = new javax.swing.JPanel();
@@ -144,10 +254,11 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             }
         });
 
-        Main.setBackground(new java.awt.Color(51, 51, 51));
+        Main.setBackground(new java.awt.Color(128, 78, 64));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(73, 46, 34)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -159,9 +270,11 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
+        Navigation.setBackground(new java.awt.Color(111, 69, 56));
+        Navigation.setBorder(javax.swing.BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(73, 46, 34)));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        logout.setBackground(new java.awt.Color(181, 126, 110));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -176,36 +289,37 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         logout.setLayout(null);
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Logout");
         logout.add(jLabel10);
         jLabel10.setBounds(0, 10, 130, 20);
 
-        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 493, 130, 40));
+        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 130, 40));
 
         acc_phone.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         acc_phone.setForeground(new java.awt.Color(255, 255, 255));
         acc_phone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         acc_phone.setText("Phone");
-        Navigation.add(acc_phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 300, 30));
+        Navigation.add(acc_phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 300, 30));
 
         acc_type.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         acc_type.setForeground(new java.awt.Color(255, 255, 255));
         acc_type.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         acc_type.setText("Type");
-        Navigation.add(acc_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 300, 30));
+        Navigation.add(acc_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 300, 30));
 
         acc_uname.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         acc_uname.setForeground(new java.awt.Color(255, 255, 255));
         acc_uname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         acc_uname.setText("User Name");
-        Navigation.add(acc_uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 300, 30));
+        Navigation.add(acc_uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 300, 30));
 
         acc_lname.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         acc_lname.setForeground(new java.awt.Color(255, 255, 255));
         acc_lname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         acc_lname.setText("Last Name");
-        Navigation.add(acc_lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 300, 30));
+        Navigation.add(acc_lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 300, 30));
 
         acc_fname.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         acc_fname.setForeground(new java.awt.Color(255, 255, 255));
@@ -217,13 +331,20 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         acc_id.setForeground(new java.awt.Color(255, 255, 255));
         acc_id.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         acc_id.setText("ID");
-        Navigation.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 30));
+        Navigation.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 300, 30));
 
-        profile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Users.png"))); // NOI18N
-        Navigation.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 135, 160, 130));
+        jPanel1.setBackground(new java.awt.Color(181, 126, 110));
+        jPanel1.setLayout(null);
 
-        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 540));
+        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Users.png"))); // NOI18N
+        jPanel1.add(image);
+        image.setBounds(10, 10, 190, 170);
 
+        Navigation.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 210, 190));
+
+        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 300, 550));
+
+        users.setBackground(new java.awt.Color(181, 126, 110));
         users.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 usersMouseClicked(evt);
@@ -245,6 +366,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         Main.add(users, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 170, 120));
 
+        users1.setBackground(new java.awt.Color(181, 126, 110));
         users1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 users1MouseClicked(evt);
@@ -266,6 +388,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         Main.add(users1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 120, 170, 120));
 
+        users2.setBackground(new java.awt.Color(181, 126, 110));
         users2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 users2MouseClicked(evt);
@@ -287,6 +410,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         Main.add(users2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 120, 170, 120));
 
+        users3.setBackground(new java.awt.Color(181, 126, 110));
         users3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 users3MouseClicked(evt);
@@ -309,21 +433,25 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         Main.add(users3, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 120, 170, 120));
 
         jLabel15.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setText("Account Details");
         Main.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, 170, 30));
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Add Recovery");
         Main.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, 170, 30));
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Change Pass");
         Main.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 250, 170, 30));
 
         jLabel18.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Purchase Tickets");
         Main.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 250, 170, 30));
@@ -424,12 +552,33 @@ public class EmployeeDashboard extends javax.swing.JFrame {
            this.dispose();
        }else
        {
-           acc_fname.setText("" + sess.getFname());
-           acc_lname.setText("" + sess.getLname());
-           acc_uname.setText("" + sess.getUname());
-           acc_type.setText("" + sess.getType());
-           acc_phone.setText("" + sess.getPhone());
-           acc_id.setText("" + sess.getUid());
+           acc_fname.setText("First Name: " + sess.getFname());
+           acc_lname.setText("Last Name: " + sess.getLname());
+           acc_uname.setText("User Name: " + sess.getUname());
+           acc_type.setText("Type: " + sess.getType());
+           acc_phone.setText("Phone: " + sess.getPhone());
+           acc_id.setText("ID: " + sess.getUid());
+
+           try {
+               dbConnect dbc = new dbConnect();
+               ResultSet rs = dbc.getData("SELECT * FROM tbl_accounts WHERE u_id = '" + sess.getUid() + "'");
+               System.out.println("1");
+               if (rs.next()) {
+                   System.out.println("2");
+                   String image1 = rs.getString("u_image");
+                   String id = rs.getString("u_id");
+                   System.out.println("image: " + image1);
+                   System.out.println("UserID: " + id);
+
+                   image.setIcon(ResizeImage(rs.getString("u_image"), null, image));
+                   oldpath = rs.getString("u_image");
+                   path = rs.getString("u_image");
+                   destination = rs.getString("u_image");
+               }
+
+           } catch (SQLException ex) {
+               System.out.println("" + ex);
+           }
        }
     }//GEN-LAST:event_formWindowActivated
 
@@ -527,14 +676,15 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel acc_phone;
     private javax.swing.JLabel acc_type;
     private javax.swing.JLabel acc_uname;
+    public javax.swing.JLabel image;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel logout;
-    private javax.swing.JLabel profile;
     private javax.swing.JPanel users;
     private javax.swing.JPanel users1;
     private javax.swing.JPanel users2;

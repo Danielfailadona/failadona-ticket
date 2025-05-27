@@ -10,6 +10,7 @@ import admin.*;
 import java.awt.Color;
 import Startups.StartupPanel;
 import config.Session;
+import config.Usables;
 import config.dbConnect;
 import config.passwordHasher;
 import java.security.NoSuchAlgorithmException;
@@ -28,12 +29,15 @@ import javax.swing.JOptionPane;
 public class E_Add_Recovery extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(145, 101, 88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181, 126, 110);
+    public final Usables use = new Usables();
     
     public E_Add_Recovery() {
         initComponents();
+        use.setImageToLabel(Backbround, "src/image/MovieCollage.jpg");
+
     }
     
     
@@ -128,20 +132,13 @@ public class E_Add_Recovery extends javax.swing.JFrame {
         Main = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        Navigation = new javax.swing.JPanel();
-        logout = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        acc_phone = new javax.swing.JLabel();
-        acc_type = new javax.swing.JLabel();
-        acc_uname = new javax.swing.JLabel();
-        acc_lname = new javax.swing.JLabel();
-        acc_fname = new javax.swing.JLabel();
-        acc_id = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         confirm = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         sq = new javax.swing.JComboBox<>();
         ans = new javax.swing.JTextField();
+        logout = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        Backbround = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -150,10 +147,11 @@ public class E_Add_Recovery extends javax.swing.JFrame {
             }
         });
 
-        Main.setBackground(new java.awt.Color(51, 51, 51));
+        Main.setBackground(new java.awt.Color(0, 0, 0));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -165,9 +163,39 @@ public class E_Add_Recovery extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
-        Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        confirm.setBackground(new java.awt.Color(181, 126, 110));
+        confirm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                confirmMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                confirmMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                confirmMouseExited(evt);
+            }
+        });
+        confirm.setLayout(null);
 
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Confirm");
+        confirm.add(jLabel11);
+        jLabel11.setBounds(0, 10, 130, 20);
+
+        Main.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 460, 130, 40));
+
+        sq.setBackground(new java.awt.Color(181, 126, 110));
+        sq.setForeground(new java.awt.Color(255, 255, 255));
+        sq.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "What's the name of your first pet?", "What's the lastname of your Mother?", "What's your favorite food?", "What's your favorite Color?", "What's your birth month?" }));
+        Main.add(sq, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 310, 570, 40));
+
+        ans.setBackground(new java.awt.Color(181, 126, 110));
+        ans.setForeground(new java.awt.Color(255, 255, 255));
+        Main.add(ans, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 400, 570, 40));
+
+        logout.setBackground(new java.awt.Color(181, 126, 110));
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutMouseClicked(evt);
@@ -182,75 +210,16 @@ public class E_Add_Recovery extends javax.swing.JFrame {
         logout.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Back");
         logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
 
-        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 130, 40));
+        Main.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, -1, 40));
 
-        acc_phone.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_phone.setForeground(new java.awt.Color(255, 255, 255));
-        acc_phone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_phone.setText("Phone");
-        Navigation.add(acc_phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 300, 30));
-
-        acc_type.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_type.setForeground(new java.awt.Color(255, 255, 255));
-        acc_type.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_type.setText("Type");
-        Navigation.add(acc_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 300, 30));
-
-        acc_uname.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_uname.setForeground(new java.awt.Color(255, 255, 255));
-        acc_uname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_uname.setText("User Name");
-        Navigation.add(acc_uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 300, 30));
-
-        acc_lname.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_lname.setForeground(new java.awt.Color(255, 255, 255));
-        acc_lname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_lname.setText("Last Name");
-        Navigation.add(acc_lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 300, 30));
-
-        acc_fname.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_fname.setForeground(new java.awt.Color(255, 255, 255));
-        acc_fname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_fname.setText("First Name");
-        Navigation.add(acc_fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 300, 30));
-
-        acc_id.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        acc_id.setForeground(new java.awt.Color(255, 255, 255));
-        acc_id.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        acc_id.setText("ID");
-        Navigation.add(acc_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 30));
-        Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-70, -40, 380, 430));
-
-        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 310, 560));
-
-        confirm.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                confirmMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                confirmMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                confirmMouseExited(evt);
-            }
-        });
-        confirm.setLayout(null);
-
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Confirm");
-        confirm.add(jLabel11);
-        jLabel11.setBounds(0, 10, 90, 10);
-
-        Main.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 460, 90, 30));
-
-        sq.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "What's the name of your first pet?", "What's the lastname of your Mother?", "What's your favorite food?", "What's your favorite Color?", "What's your birth month?" }));
-        Main.add(sq, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 370, 410, 30));
-        Main.add(ans, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 410, 410, 30));
+        Backbround.setBackground(new java.awt.Color(181, 126, 110));
+        Backbround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/MovieCollage.jpg"))); // NOI18N
+        Main.add(Backbround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1320, 560));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -361,12 +330,12 @@ public class E_Add_Recovery extends javax.swing.JFrame {
            this.dispose();
        }else
        {
-           acc_fname.setText("" + sess.getFname());
-           acc_lname.setText("" + sess.getLname());
-           acc_uname.setText("" + sess.getUname());
-           acc_type.setText("" + sess.getType());
-           acc_phone.setText("" + sess.getPhone());
-           acc_id.setText("" + sess.getUid());
+//           acc_fname.setText("" + sess.getFname());
+//           acc_lname.setText("" + sess.getLname());
+//           acc_uname.setText("" + sess.getUname());
+//           acc_type.setText("" + sess.getType());
+//           acc_phone.setText("" + sess.getPhone());
+//           acc_id.setText("" + sess.getUid());
        }
     }//GEN-LAST:event_formWindowActivated
 
@@ -409,21 +378,14 @@ public class E_Add_Recovery extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Backbround;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Main;
-    private javax.swing.JPanel Navigation;
-    private javax.swing.JLabel acc_fname;
-    private javax.swing.JLabel acc_id;
-    private javax.swing.JLabel acc_lname;
-    private javax.swing.JLabel acc_phone;
-    private javax.swing.JLabel acc_type;
-    private javax.swing.JLabel acc_uname;
     private javax.swing.JTextField ans;
     private javax.swing.JPanel confirm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel logout;
     private javax.swing.JComboBox<String> sq;
     // End of variables declaration//GEN-END:variables

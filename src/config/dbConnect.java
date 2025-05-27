@@ -1,12 +1,16 @@
 
 package config;
 
+import static admin.CU_Admin.getHeightFromWidth;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 public class dbConnect 
@@ -102,5 +106,10 @@ public class dbConnect
     public Connection getConnection() {
         return connect;
     }
+    
+    
+    
+    
+
     
 }

@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import net.proteanit.sql.DbUtils;
 import Startups.Login;
 import config.Session;
+import config.Usables;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,10 +29,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 public class Logs_Admin extends javax.swing.JFrame {
 
-     private Color H;
-    Color h = new Color(51,51,255);
+    private Color H;
+    Color h = new Color(51, 51, 255);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(240, 240, 240);
+    public final Usables use = new Usables();
     
     public Logs_Admin() {
         initComponents();
@@ -280,17 +282,24 @@ public class Logs_Admin extends javax.swing.JFrame {
         logout = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        Backbround = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         account_table = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         Main.setBackground(new java.awt.Color(39, 39, 39));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -302,7 +311,8 @@ public class Logs_Admin extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
+        Navigation.setBackground(new java.awt.Color(158, 98, 80));
+        Navigation.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -323,10 +333,13 @@ public class Logs_Admin extends javax.swing.JFrame {
         jLabel10.setText("Back");
         logout.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 130, -1));
 
-        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 493, 130, 40));
+        Navigation.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 130, 40));
         Navigation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, -80, 300, 160));
 
-        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 540));
+        Backbround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Jeva.png"))); // NOI18N
+        Navigation.add(Backbround, new org.netbeans.lib.awtextra.AbsoluteConstraints(-480, 10, 810, 560));
+
+        Main.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 300, 550));
 
         account_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -372,6 +385,16 @@ public class Logs_Admin extends javax.swing.JFrame {
         logout.setBackground(d);
     }//GEN-LAST:event_logoutMouseExited
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
@@ -411,6 +434,7 @@ public class Logs_Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Backbround;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Main;
     private javax.swing.JPanel Navigation;

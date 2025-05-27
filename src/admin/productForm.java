@@ -138,19 +138,29 @@ public class productForm extends javax.swing.JFrame {
     public static int getHeightFromWidth(String imagePath, int desiredWidth) {
         try {
             // Read the image file
+            System.out.println("desiredWidth: "+desiredWidth);
+            System.out.println("1");
             File imageFile = new File(imagePath);
+            System.out.println("imagePath: "+imagePath);
+            System.out.println("imageFile: "+imageFile);
             BufferedImage image = ImageIO.read(imageFile);
+            System.out.println("image: "+image);
+            System.out.println("2");
 
             // Get the original width and height of the image
             int originalWidth = image.getWidth();
             int originalHeight = image.getHeight();
+            System.out.println("3");
 
             // Calculate the new height based on the desired width and the aspect ratio
             int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            System.out.println("4");
 
             return newHeight;
         } catch (IOException ex) {
-            System.out.println("No image found!");
+//            System.out.println("imagePath!"+imagePath); //Image path exists,  Must_Debug:False
+//            System.out.println("No image found!");
+            System.out.println(""+ex);
         }
 
         return -1;
@@ -211,10 +221,12 @@ public class productForm extends javax.swing.JFrame {
                 String u = rs.getString("p_id");
                 String pn = rs.getString("p_name");
                 String pp = rs.getString("p_price");
+                String pq = rs.getString("p_quantity");
                 String status = rs.getString("p_status");
                 
 
                 // Check if the user status is not "Deleted"
+//                if (!status.equals("Deleted") && !status.equals("Unavailable")) {
                 if (!status.equals("Deleted")) {
                     
                     // Add the row to the list
@@ -222,6 +234,7 @@ public class productForm extends javax.swing.JFrame {
                         u,
                         pn,
                         pp, 
+                        pq, 
                         status 
                     });
                     /*System.out.println("\n==========");
@@ -239,7 +252,7 @@ public class productForm extends javax.swing.JFrame {
             SwingUtilities.invokeLater(() -> {
                 
                 DefaultTableModel model = new DefaultTableModel(
-                        new String[]{"ID", "Movie Name", "Price", "Status"}, 0
+                        new String[]{"ID", "Movie Name", "Price", "Quantity Left", "Status"}, 0
                 );
                 for (Object[] row : rowData) {
                     model.addRow(row);
@@ -292,9 +305,10 @@ public class productForm extends javax.swing.JFrame {
                 {
                     model.addRow(new Object[]
                     {
-                        rs.getInt("u_id"),
+                        rs.getInt("p_id"),
                         rs.getString("p_name"),
                         rs.getString("p_price"),
+                        rs.getString("p_quantity"),
                         rs.getString("p_status"),
                     });
                 }
@@ -396,7 +410,7 @@ public class productForm extends javax.swing.JFrame {
                             uname2 = rs2.getString("u_username");
                             loadUsersData();
                         }
-                        logEvent(userId, uname2, "Admin Deleted Account: " + uname2);
+                        logEvent(userId, uname2, "Admin Deleted Movie: " + pn);
 
                     } catch (SQLException ex) 
                     {
@@ -458,11 +472,17 @@ public class productForm extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
-        Main.setBackground(new java.awt.Color(39, 39, 39));
+        Main.setBackground(new java.awt.Color(158, 98, 80));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -474,7 +494,7 @@ public class productForm extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(102, 102, 102));
+        Navigation.setBackground(new java.awt.Color(158, 98, 80));
         Navigation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -687,7 +707,7 @@ public class productForm extends javax.swing.JFrame {
         });
         Main.add(Mname, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 330, 30));
 
-        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Out of Stock" }));
+        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Unavailable" }));
         status.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusActionPerformed(evt);
@@ -777,19 +797,15 @@ public class productForm extends javax.swing.JFrame {
             } else if (duplicateCheck()) {
                 JOptionPane.showMessageDialog(null, "Duplicate Exists");
             } else {
-                System.out.println("1");
                 try {
-                    System.out.println("2");
 
                     if (dbc.insertData("INSERT INTO tbl_products (p_name, p_price, p_quantity, p_status, p_image, p_sold) "
                             + "VALUES ('" + mn + "', '" + pr + "', '" + q + "', '" + st + "', '" + destination + "', '" + sold + "')")) 
                     {
-                        System.out.println("3");
                         
 
                         try 
                         {
-                            System.out.println("4");
                             String query2 = "SELECT * FROM tbl_accounts WHERE u_id = '" + sess.getUid() + "'";
                             PreparedStatement pstmt = connector.getConnection().prepareStatement(query2);
 
@@ -927,7 +943,12 @@ public class productForm extends javax.swing.JFrame {
                     PID.setText("" + rs.getString("p_id"));
                     Mname.setText("" + rs.getString("p_name"));
                     Price.setText("" + rs.getString("p_price"));
+                    qnty.setText("" + rs.getString("p_quantity"));
                     status.setSelectedItem("" + rs.getString("p_status"));
+                    image.setIcon(ResizeImage(rs.getString("p_image"), null, image));
+                    oldpath = rs.getString("p_image");
+                    path = rs.getString("p_image");
+                    destination = rs.getString("p_image");
 //                    addClickable = false;
 //                    ad.setForeground(red);
                 }
@@ -945,7 +966,12 @@ public class productForm extends javax.swing.JFrame {
         PID.setText("");
         Mname.setText("");
         Price.setText("");
+        qnty.setText("");
         status.setSelectedItem(0);
+        
+        image.setIcon(null);
+        destination = "";
+        path = "";
 
     }//GEN-LAST:event_add2MouseClicked
 
@@ -989,28 +1015,23 @@ public class productForm extends javax.swing.JFrame {
                 System.out.println("Duplicate Exists");
             } else {
                 try {
-                    System.out.println("1");
                     String query = "SELECT * FROM tbl_products WHERE p_id='" + u + "'";
                     ResultSet rs = dbc.getData(query);
                     if (rs.next()) {
-                        System.out.println("2");
 
                         dbc.updateData("UPDATE tbl_products SET p_name = '" + mn + "', p_price = '" + p + "', p_quantity = '" + q + "', p_status = '" + s + "', p_image = '" + destination + "' WHERE p_id = '" + u + "'");
 
                         try {
-                            System.out.println("3");
                             String query2 = "SELECT * FROM tbl_accounts WHERE u_id = '" + sess.getUid() + "'";
                             PreparedStatement pstmt = connector.getConnection().prepareStatement(query2);
 
                             ResultSet resultSet = pstmt.executeQuery();
 
                             if (resultSet.next()) {
-                                System.out.println("4");
                                 userId = resultSet.getInt("u_id");   // Update the outer `userId` correctly
                                 uname2 = resultSet.getString("u_username");
                             }
                         } catch (SQLException ex) {
-                            System.out.println("5");
                             System.out.println("SQL Exception: " + ex);
 
                         }
@@ -1018,14 +1039,12 @@ public class productForm extends javax.swing.JFrame {
                         logEvent(userId, uname2, "Admin Updated The Movie: " + mn);
 
                         if (destination.isEmpty()) {
-                            System.out.println("6");
                             if (oldpath != null) {
                                 File existingFile = new File(oldpath);
                                 if (existingFile.exists()) {
                                     existingFile.delete();
                                 }
                             } else {
-                                System.out.println("⚠️ Warning: oldpath is null, cannot delete.");
                             }
                         } else {
                             if (!(oldpath.equals(path))) {
@@ -1040,7 +1059,6 @@ public class productForm extends javax.swing.JFrame {
 //                        status.setSelectedItem(0);
                     }
                 } catch (SQLException ex) {
-                    System.out.println("7");
                     System.out.println("" + ex);
                 }
             }
@@ -1070,6 +1088,16 @@ public class productForm extends javax.swing.JFrame {
     private void qntyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qntyActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_qntyActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Session sess = Session.getInstance();
+        if (sess.getUid() == 0) {
+            JOptionPane.showMessageDialog(null, "No Account, Login FIrst");
+            Login l = new Login();
+            l.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

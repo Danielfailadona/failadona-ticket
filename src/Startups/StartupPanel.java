@@ -1,6 +1,6 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+// * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package Startups;
@@ -8,7 +8,9 @@ package Startups;
 import Processes.showMovies;
 import admin.AdminDashboard;
 import admin.U_Admin;
+import config.Usables;
 import java.awt.Color;
+import java.io.File;
 
 /**
  *
@@ -17,16 +19,26 @@ import java.awt.Color;
 public class StartupPanel extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(145,101,88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181,126,110);
+    public final Usables use = new Usables();
+
 
     
     public StartupPanel() {
+        
         initComponents();
         this.setResizable(false);
-
+//        use.setImageToLabel(Change_Pass, "C:/Users/DANIEL FAILADONA/Documents/theaterGUI/src/images/Avengers.jpg");
+        use.setImageToLabel(Change_Pass, "src/image/Jeva.png");
+        
     }
+    
+//    public String destination = "";
+//    File selectedFile;
+//    public String oldpath;
+//    public String path;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,13 +61,15 @@ public class StartupPanel extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        Change_Pass = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Main.setBackground(new java.awt.Color(39, 39, 39));
         Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -67,7 +81,7 @@ public class StartupPanel extends javax.swing.JFrame {
 
         Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Main1.setBackground(new java.awt.Color(102, 102, 102));
+        Main1.setBackground(new java.awt.Color(0, 0, 0));
         Main1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Header1.setBackground(new java.awt.Color(0, 0, 0));
@@ -82,6 +96,8 @@ public class StartupPanel extends javax.swing.JFrame {
 
         Main1.add(Header1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
+        ShowM.setBackground(new java.awt.Color(181, 126, 110));
+        ShowM.setBorder(javax.swing.BorderFactory.createMatteBorder(4, 4, 4, 4, new java.awt.Color(255, 255, 255)));
         ShowM.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ShowMMouseClicked(evt);
@@ -96,12 +112,15 @@ public class StartupPanel extends javax.swing.JFrame {
         ShowM.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Show Movies");
         ShowM.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 230, -1));
 
         Main1.add(ShowM, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, 280, 80));
 
+        Login.setBackground(new java.awt.Color(181, 126, 110));
+        Login.setBorder(javax.swing.BorderFactory.createMatteBorder(4, 4, 4, 4, new java.awt.Color(255, 255, 255)));
         Login.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 LoginMouseClicked(evt);
@@ -116,13 +135,19 @@ public class StartupPanel extends javax.swing.JFrame {
         Login.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Login");
         Login.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 15, 270, 50));
 
         Main1.add(Login, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 340, 280, 80));
         Main1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 140, 220));
-        Main1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1320, 540));
+        Main1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 1320, 70));
+
+        Change_Pass.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        Change_Pass.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Change_Pass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Jeva.png"))); // NOI18N
+        Main1.add(Change_Pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1320, 540));
 
         Main.add(Main1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 640));
 
@@ -206,6 +231,7 @@ public class StartupPanel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Change_Pass;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Header1;
     private javax.swing.JPanel Login;

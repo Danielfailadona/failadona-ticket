@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import Startups.StartupPanel;
 import config.Session;
+import config.Usables;
 import config.passwordHasher;
 import static java.awt.Color.black;
 import java.security.NoSuchAlgorithmException;
@@ -30,11 +31,15 @@ import java.util.Date;
 public class Login extends javax.swing.JFrame {
 
     private Color H;
-    Color h = new Color(51,51,255);
+    Color h = new Color(145, 101, 88);
     private Color D;
-    Color d = new Color(240,240,240);
+    Color d = new Color(181, 126, 110);
+    public final Usables use = new Usables();
+
     public Login() {
         initComponents();
+        use.setImageToLabel(Change_Pass, "src/image/Jeva.png");
+
     }
 
     static String status;
@@ -136,11 +141,9 @@ public class Login extends javax.swing.JFrame {
         Manager_Login = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        Navigation = new javax.swing.JPanel();
         Manager_Login1 = new javax.swing.JPanel();
         Header1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        Navigation1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         passwordML = new javax.swing.JPasswordField();
@@ -154,13 +157,15 @@ public class Login extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         MR_clickhere1 = new javax.swing.JLabel();
         check = new javax.swing.JCheckBox();
+        Change_Pass = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Manager_Login.setBackground(new java.awt.Color(51, 51, 51));
         Manager_Login.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Header.setBackground(new java.awt.Color(0, 0, 0));
+        Header.setBackground(new java.awt.Color(181, 126, 110));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(255, 255, 255)));
         Header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 255, 0));
@@ -172,22 +177,7 @@ public class Login extends javax.swing.JFrame {
 
         Manager_Login.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation.setBackground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout NavigationLayout = new javax.swing.GroupLayout(Navigation);
-        Navigation.setLayout(NavigationLayout);
-        NavigationLayout.setHorizontalGroup(
-            NavigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
-        );
-        NavigationLayout.setVerticalGroup(
-            NavigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-        );
-
-        Manager_Login.add(Navigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 630, 540));
-
-        Manager_Login1.setBackground(new java.awt.Color(102, 102, 102));
+        Manager_Login1.setBackground(new java.awt.Color(30, 30, 30));
         Manager_Login1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Header1.setBackground(new java.awt.Color(0, 0, 0));
@@ -202,47 +192,38 @@ public class Login extends javax.swing.JFrame {
 
         Manager_Login1.add(Header1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 100));
 
-        Navigation1.setBackground(new java.awt.Color(102, 102, 102));
-
-        javax.swing.GroupLayout Navigation1Layout = new javax.swing.GroupLayout(Navigation1);
-        Navigation1.setLayout(Navigation1Layout);
-        Navigation1Layout.setHorizontalGroup(
-            Navigation1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
-        );
-        Navigation1Layout.setVerticalGroup(
-            Navigation1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-        );
-
-        Manager_Login1.add(Navigation1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 630, 540));
-
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Username:");
-        Manager_Login1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 200, 80, 30));
+        Manager_Login1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 100, 30));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Password:");
-        Manager_Login1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 250, 80, 30));
+        Manager_Login1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 100, 30));
 
+        passwordML.setBackground(new java.awt.Color(181, 126, 110));
+        passwordML.setForeground(new java.awt.Color(255, 255, 255));
         passwordML.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         passwordML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordMLActionPerformed(evt);
             }
         });
-        Manager_Login1.add(passwordML, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 250, 330, 30));
+        Manager_Login1.add(passwordML, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 300, 500, 30));
 
+        usernameML.setBackground(new java.awt.Color(181, 126, 110));
+        usernameML.setForeground(new java.awt.Color(255, 255, 255));
         usernameML.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         usernameML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameMLActionPerformed(evt);
             }
         });
-        Manager_Login1.add(usernameML, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 200, 330, 30));
+        Manager_Login1.add(usernameML, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, 500, 30));
 
+        confirm1.setBackground(new java.awt.Color(181, 126, 110));
+        confirm1.setForeground(new java.awt.Color(255, 255, 255));
         confirm1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 confirm1MouseClicked(evt);
@@ -256,7 +237,8 @@ public class Login extends javax.swing.JFrame {
         });
         confirm1.setLayout(null);
 
-        MR_clickhere.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        MR_clickhere.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        MR_clickhere.setForeground(new java.awt.Color(255, 255, 255));
         MR_clickhere.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         MR_clickhere.setText("Register");
         MR_clickhere.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -265,10 +247,12 @@ public class Login extends javax.swing.JFrame {
             }
         });
         confirm1.add(MR_clickhere);
-        MR_clickhere.setBounds(0, 10, 90, 10);
+        MR_clickhere.setBounds(0, 10, 140, 20);
 
-        Manager_Login1.add(confirm1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 450, 90, 30));
+        Manager_Login1.add(confirm1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 490, 140, 40));
 
+        confirm.setBackground(new java.awt.Color(181, 126, 110));
+        confirm.setForeground(new java.awt.Color(255, 255, 255));
         confirm.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 confirmMouseClicked(evt);
@@ -282,14 +266,16 @@ public class Login extends javax.swing.JFrame {
         });
         confirm.setLayout(null);
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Login");
         confirm.add(jLabel5);
-        jLabel5.setBounds(0, 5, 90, 20);
+        jLabel5.setBounds(0, 10, 140, 20);
 
-        Manager_Login1.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 450, 90, 30));
+        Manager_Login1.add(confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 490, 140, 40));
 
+        cancel.setBackground(new java.awt.Color(181, 126, 110));
         cancel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cancelMouseClicked(evt);
@@ -303,16 +289,17 @@ public class Login extends javax.swing.JFrame {
         });
         cancel.setLayout(null);
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Cancel");
         cancel.add(jLabel6);
-        jLabel6.setBounds(0, 10, 90, 10);
+        jLabel6.setBounds(0, 10, 120, 20);
 
-        Manager_Login1.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 610, 90, 30));
-        Manager_Login1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 570, 240, 80));
+        Manager_Login1.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 120, 40));
+        Manager_Login1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 570, 240, 80));
 
-        MR_clickhere1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        MR_clickhere1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         MR_clickhere1.setForeground(new java.awt.Color(255, 255, 255));
         MR_clickhere1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         MR_clickhere1.setText("Forgot Password? click here");
@@ -327,7 +314,7 @@ public class Login extends javax.swing.JFrame {
                 MR_clickhere1MouseExited(evt);
             }
         });
-        Manager_Login1.add(MR_clickhere1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 300, 330, 20));
+        Manager_Login1.add(MR_clickhere1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 350, 350, 20));
 
         check.setBackground(new java.awt.Color(102, 102, 102));
         check.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
@@ -338,7 +325,14 @@ public class Login extends javax.swing.JFrame {
                 checkActionPerformed(evt);
             }
         });
-        Manager_Login1.add(check, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 254, -1, -1));
+        Manager_Login1.add(check, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 300, -1, -1));
+
+        Change_Pass.setBackground(new java.awt.Color(181, 126, 110));
+        Change_Pass.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        Change_Pass.setForeground(new java.awt.Color(255, 255, 255));
+        Change_Pass.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Change_Pass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Jeva.png"))); // NOI18N
+        Manager_Login1.add(Change_Pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1320, 540));
 
         Manager_Login.add(Manager_Login1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 640));
 
@@ -536,14 +530,13 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Change_Pass;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Header1;
     private javax.swing.JLabel MR_clickhere;
     private javax.swing.JLabel MR_clickhere1;
     private javax.swing.JPanel Manager_Login;
     private javax.swing.JPanel Manager_Login1;
-    private javax.swing.JPanel Navigation;
-    private javax.swing.JPanel Navigation1;
     private javax.swing.JPanel cancel;
     private javax.swing.JCheckBox check;
     private javax.swing.JPanel confirm;
